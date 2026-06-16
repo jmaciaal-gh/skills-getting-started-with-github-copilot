@@ -1,11 +1,11 @@
-# Mergington High School Activities API
+# Calculator API
 
-A super simple FastAPI application that allows students to view and sign up for extracurricular activities.
+A super simple FastAPI application with a web UI that simulates a calculator.
 
 ## Features
 
-- View all available extracurricular activities
-- Sign up for activities
+- Perform add, subtract, multiply, and divide operations
+- Handle division-by-zero and invalid-operation errors
 
 ## Getting Started
 
@@ -27,24 +27,14 @@ A super simple FastAPI application that allows students to view and sign up for 
 
 ## API Endpoints
 
-| Method | Endpoint                                                          | Description                                                         |
-| ------ | ----------------------------------------------------------------- | ------------------------------------------------------------------- |
-| GET    | `/activities`                                                     | Get all activities with their details and current participant count |
-| POST   | `/activities/{activity_name}/signup?email=student@mergington.edu` | Sign up for an activity                                             |
+| Method | Endpoint     | Description                                      |
+| ------ | ------------ | ------------------------------------------------ |
+| POST   | `/calculate` | Execute a calculation based on input operands and operation |
 
 ## Data Model
 
-The application uses a simple data model with meaningful identifiers:
+The `/calculate` endpoint expects:
 
-1. **Activities** - Uses activity name as identifier:
-
-   - Description
-   - Schedule
-   - Maximum number of participants allowed
-   - List of student emails who are signed up
-
-2. **Students** - Uses email as identifier:
-   - Name
-   - Grade level
-
-All data is stored in memory, which means data will be reset when the server restarts.
+- `left`: number
+- `right`: number
+- `operation`: one of `add`, `subtract`, `multiply`, `divide`

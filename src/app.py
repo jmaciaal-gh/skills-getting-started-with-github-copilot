@@ -8,6 +8,7 @@ for extracurricular activities at Mergington High School.
 from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
+from pydantic import BaseModel
 import os
 from pathlib import Path
 
@@ -42,6 +43,12 @@ activities = {
 }
 
 
+class CalculationRequest(BaseModel):
+    left: float
+    right: float
+    operation: str
+
+
 @app.get("/")
 def root():
     return RedirectResponse(url="/static/index.html")
@@ -65,3 +72,22 @@ def signup_for_activity(activity_name: str, email: str):
     # Add student
     activity["participants"].append(email)
     return {"message": f"Signed up {email} for {activity_name}"}
+
+
+@app.post("/calculate")
+def calculate(request: CalculationRequest):
+    operations = {
+        "add": request.left + request.right,
+        "subtract": request.left - request.right,
+        "multiply": request.left * request.right,
+    }
+
+    if request.operation == "divide":
+        if request.right == 0:
+            raise HTTPException(status_code=400, detail="Cannot divide by zero")
+        return {"result": request.left / request.right}
+
+    if request.operation not in operations:
+        raise HTTPException(status_code=400, detail="Unsupported operation")
+
+    return {"result": operations[request.operation]}
